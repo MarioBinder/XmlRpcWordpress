@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using XmlRpcWordpress.Core.Models;
+using System.Configuration;
 
 namespace XmlRpcWordpress
 {
@@ -7,20 +11,51 @@ namespace XmlRpcWordpress
     /// </summary>
     public partial class MainWindow : Window
     {
+        private WordpressWrapper wp;
+
+        public UserInfo UserInfo { get; set; }
+        public List<BlogPost> BlogPosts { get; set; }
+
+        void GetUserInfoCallback(IAsyncResult result)
+        {
+            UserInfo = wp.EndGetUserInfo(result);
+        }
+
+        void GetBlogPostCallback(IAsyncResult result)
+        {
+            BlogPosts = new List<BlogPost>();
+            BlogPosts = wp.EndGetRecentPost(result);
+        }
+
         public MainWindow()
         {
             InitializeComponent();
 
-            var wp = new WordpressBlog("USERNAME", "PASSWORD", @"http://www.biggle.de/blog");
+            var username = ConfigurationManager.AppSettings.Get("username");
+            var password = ConfigurationManager.AppSettings.Get("password");
+            var url = ConfigurationManager.AppSettings.Get("url");
+            wp = new WordpressWrapper(username, password, url);
             
+            wp.BeginGetUserInfo(GetUserInfoCallback);
+            wp.BeginGetRecentPost(GetBlogPostCallback);
 
-            ////UserInfo ermitteln
+
+            //wp.BeginGetUserInfo(asr => Dispatcher.Invoke(
+            //    () => UserInfo = wp.EndGetUserInfo(asr)));
+
+
+            //wp.BeginGetRecentPost(asr => Dispatcher.BeginInvoke(
+            //    () => BlogPosts = wp.EndGetRecentPost(asr)));
+
+
+
+            //UserInfo ermitteln
             //var userInfo = wp.GetUserInfo();
-            
 
+            
             ////Ermitteln der verfügbaren Blogs
             //var blogs = wp.GetUserBlogs();
-            
+
 
             ////Ermitteln der KommentarStatus
             //var commentStatusList = wp.GetCommentStatusList();
@@ -105,7 +140,7 @@ namespace XmlRpcWordpress
             //var supportedMethods = wp.GetSupportedMethods();
 
 
-           
+
 
         }
 
