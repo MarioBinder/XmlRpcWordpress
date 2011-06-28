@@ -1,1 +1,3 @@
 XmlRpcWordpress - a .NET wrapper for the wordpress xmlrpc
+
+- change the Authentification in core/app.config
