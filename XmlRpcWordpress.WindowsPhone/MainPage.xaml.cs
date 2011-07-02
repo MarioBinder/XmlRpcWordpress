@@ -12,6 +12,7 @@ namespace XmlRpcWordpress.WindowsPhone
 
         public UserInfo UserInfo { get; set; }
         public List<BlogPost> BlogPosts { get; set; }
+        public BlogPost Post { get; set; }
 
         void GetUserInfoCallback(IAsyncResult result)
         {
@@ -24,21 +25,21 @@ namespace XmlRpcWordpress.WindowsPhone
             BlogPosts = wp.EndGetRecentPost(result);
         }
 
+        void GetPostCallback(IAsyncResult result)
+        {
+            Post = wp.EndGetPost(result);
+        }
 
-        // Konstruktor
+
+        
         public MainPage()
         {
-            InitializeComponent();
-
-            var username = ConfigurationManager.AppSettings["username"];
-            var password = ConfigurationManager.AppSettings["password"];
-            var url = ConfigurationManager.AppSettings["url"];
-
-            wp = new WordpressWrapper(username, password, url);
+            InitializeComponent();            
+            wp = new WordpressWrapper(new Auth().GetAuthentification());
 
             wp.BeginGetUserInfo(GetUserInfoCallback);
             wp.BeginGetRecentPost(GetBlogPostCallback);
-
+            wp.BeginGetPost(6500, GetPostCallback);
 
             this.DataContext = this;
         }

@@ -9,7 +9,7 @@ namespace XmlRpcWordpress.Core.Models
     {
         public string wp_post_format { get; set; }
         public string wp_author_id { get; set; }
-        public string postid { get; set; }
+        public object postid { get; set; }
         public int mt_allow_pings { get; set; }
         public string mt_text_more { get; set; }
         public string userid { get; set; }

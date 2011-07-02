@@ -61,6 +61,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\XmlRpcWordpress.Core\IAuthentification.cs">
+      <Link>IAuthentification.cs</Link>
+    </Compile>
     <Compile Include="..\XmlRpcWordpress.Core\Models\BlogPost.cs">
       <Link>Models\BlogPost.cs</Link>
     </Compile>
@@ -76,6 +79,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Auth.cs" />
     <Compile Include="Helper\ConfigurationsManager.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

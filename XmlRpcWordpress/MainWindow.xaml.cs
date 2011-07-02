@@ -15,6 +15,7 @@ namespace XmlRpcWordpress
 
         public UserInfo UserInfo { get; set; }
         public List<BlogPost> BlogPosts { get; set; }
+        public BlogPost Post { get; set; }
 
         void GetUserInfoCallback(IAsyncResult result)
         {
@@ -26,18 +27,26 @@ namespace XmlRpcWordpress
             BlogPosts = new List<BlogPost>();
             BlogPosts = wp.EndGetRecentPost(result);
         }
+        
+        void GetPostCallback(IAsyncResult result)
+        {
+            Post = wp.EndGetPost(result);
+        }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            var username = ConfigurationManager.AppSettings.Get("username");
-            var password = ConfigurationManager.AppSettings.Get("password");
-            var url = ConfigurationManager.AppSettings.Get("url");
-            wp = new WordpressWrapper(username, password, url);
+           
+            wp = new WordpressWrapper(new Auth().GetAuthentification());
             
+
             wp.BeginGetUserInfo(GetUserInfoCallback);
             wp.BeginGetRecentPost(GetBlogPostCallback);
+            wp.BeginGetPost(6500, GetPostCallback);
+
+
+
 
 
             //wp.BeginGetUserInfo(asr => Dispatcher.Invoke(
